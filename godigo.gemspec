@@ -7,11 +7,11 @@ Gem::Specification.new do |spec|
   spec.name          = "godigo"
   spec.version       = Godigo::VERSION
   spec.authors       = ["Yusuke Yachi"]
-  spec.email         = ["yusuke.yachi@gmail.com"]
+  spec.email         = ["yyachi@misasa.okayama-u.ac.jp"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Godigo}
+  spec.description   = %q{Command-line tools for Godigo}
+  spec.homepage      = "http://dream.misasa.okayama-u.ac.jp"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
