@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'godigo/runner'
+
+argv = ARGV.clone
+argv.unshift("-o")
+argv.unshift("start")
+Godigo::Runner.new.run(argv, :command_name => "session_command", :program_name => "godigo-session-start")

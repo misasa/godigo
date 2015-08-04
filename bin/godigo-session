@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'godigo/runner'
+
+Godigo::Runner.new.run(ARGV, :command_name => "session_command", :program_name => "godigo-session")

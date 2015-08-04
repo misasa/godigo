@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require 'godigo/runner'
+
+argv = ARGV.clone
+argv.unshift("sync")
+Godigo::Runner.new.run(argv, :command_name => "session_command", :program_name => "godigo-session-sync")
