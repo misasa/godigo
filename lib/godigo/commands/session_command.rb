@@ -23,7 +23,7 @@ module Godigo::Commands
 						  Create backup to remote directory specified in a configuration
 						  file.  The action invokes `rsync' as sub-process.
 
-					EXAMPLE OF CONFIGURATION FILE `~/.orochirc'
+					EXAMPLE OF CONFIGURATION FILE `~/.godigorc'
 						machine: 6UHP-70
 						uri_machine: database.misasa.okayama-u.ac.jp/machine
 						src_path: C:/Users/dream/Desktop/deleteme.d
@@ -136,7 +136,11 @@ module Godigo::Commands
 
 		def get_dst_path
 #    dst_path: falcon@itokawa.misasa.okayama-u.ac.jp:/home/falcon/deleteme.d
-			_path = config[:dst_path]
+			if config.has_key?(:dst_path)
+				_path = config[:dst_path]
+			elsif config.has_key?('dst_path')
+				_path = config['dst_path']				
+			end
 			unless _path
 				raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |dst_path|.  Put a line such like |dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/mymachine/sync|."
 			end
@@ -145,7 +149,11 @@ module Godigo::Commands
 
 		def get_src_path
 #    src_path: C:/Users/dream/Desktop/deleteme.d
-			_path = config[:src_path]
+			if config.has_key?(:src_path)
+				_path = config[:src_path]
+			elsif config.has_key?('src_path')
+				_path = config['src_path']				
+			end
 			unless _path
 				raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |src_path|.  Put a line such like |src_path: C:/Users/dream/Desktop/deleteme.d"
 			end

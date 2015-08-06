@@ -31,5 +31,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
 
-  spec.add_dependency "machine_time_client"
+  spec.add_dependency "machine_time_client", "~> 0.1"
+  spec.add_dependency 'unindent'
 end
