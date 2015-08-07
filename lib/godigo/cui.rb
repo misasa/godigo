@@ -1,5 +1,5 @@
 require 'machine_time_client'
-
+require 'optparse'
 require 'unindent'
 module Godigo
 	class Cui
