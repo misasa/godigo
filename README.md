@@ -25,12 +25,12 @@ Or install it yourself as:
 
 Commands are summarized as:
 
-| command              | description                                                               | note                       |
-|----------------------|-----------------------------------|---------------------|
-| godigo-session       | Start or stop machine session     |                     |
-| godigo-session-start |                                   |                     |
-| godigo-session-stop  |                                   |                     |
-| godigo-session-sync  |                                   |                     |
+| command              | description                                                         | note                |
+|----------------------|---------------------------------------------------------------------|---------------------|
+| godigo-session       | Start or stop machine session                                       |                     |
+| godigo-session-start | Start the machin on machine-server to log status                    |                     |
+| godigo-session-stop  | Stop the machin on machine-server to log status                     |                     |
+| godigo-session-sync  | Create backup to remote directory specified in a configuration file |                     |
 
 ## Usage
 
