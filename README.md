@@ -1,12 +1,12 @@
-# Godigo
+# godigo
 
 Start or stop machine session
 
-## Dependency
+# Dependency
 
-### [machine_time_client](http://devel.misasa.okayama-u.ac.jp/gitlab/gems/machine_time_client/tree/master "follow instruction")
+## [machine_time_client](http://devel.misasa.okayama-u.ac.jp/gitlab/gems/machine_time_client/tree/master "follow instruction")
 
-## Installation
+# Installation
 
 Add this line to your application's Gemfile:
 
@@ -21,7 +21,7 @@ Or install it yourself as:
     $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems
     $ gem install godigo
 
-## Commands
+# Commands
 
 Commands are summarized as:
 
@@ -29,11 +29,11 @@ Commands are summarized as:
 |----------------------|---------------------------------------------------------------------|---------------------|
 | godigo-session       | Start or stop machine session                                       |                     |
 
-## Usage
+# Usage
 
 See online document with option `--help`.
 
-## Contributing
+# Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/godigo/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
