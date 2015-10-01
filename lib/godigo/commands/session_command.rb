@@ -14,7 +14,8 @@ module Godigo::Commands
 					DESCRIPTION
 						Start or stop machine session.  This also offers backup interface.
 						Action can be `start', `stop', and `sync'.  Machine and
-						machine-server should be specified in a configuration file.
+						machine-server should be specified in a configuration file as inferred
+                        later.
 
 						start, stop
 						  Start or stop the machin on machine-server to log status
@@ -24,8 +25,10 @@ module Godigo::Commands
 						  file.  The action invokes `rsync' as sub-process.
 
 					EXAMPLE OF CONFIGURATION FILE `~/.godigorc'
-						machine: 6UHP-70
+						## godigo-session start/stop
+                        machine: 6UHP-70
 						uri_machine: database.misasa.okayama-u.ac.jp/machine
+                        ## godigo-session sync
 						src_path: C:/Users/dream/Desktop/deleteme.d
 						dst_path: falcon@itokawa.misasa.okayama-u.ac.jp:/home/falcon/deleteme.d
 
@@ -37,6 +40,9 @@ module Godigo::Commands
 						Orochi, version 9
 						Copyright (C) 2015 Okayama University
 						License GPLv3+: GNU GPL version 3 or later
+
+                    HISTORY
+                        October 1, 2015: Documentated by Tak Kunihiro
 
 					OPTIONS
 				EOS
