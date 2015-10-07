@@ -28,6 +28,9 @@ Commands are summarized as:
 | command              | description                                                         | note                |
 |----------------------|---------------------------------------------------------------------|---------------------|
 | godigo-session       | Start or stop machine session                                       |                     |
+| godigo-session-start | description not available                                           |                     |
+| godigo-session-stop  | description not available                                           |                     |
+| godigo-session-sync  | description not available                                           |                     |
 
 # Usage
 
