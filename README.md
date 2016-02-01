@@ -27,10 +27,10 @@ Commands are summarized as:
 
 | command              | description                                                         | note                |
 |----------------------|---------------------------------------------------------------------|---------------------|
-| godigo-session       | Start or stop machine session                                       |                     |
-| godigo-session-start | description not available                                           |                     |
-| godigo-session-stop  | description not available                                           |                     |
-| godigo-session-sync  | description not available                                           |                     |
+| godigo-session       | Start, stop, or sync machine session                                |                     |
+| godigo-session-start | Start a machine session                                             |                     |
+| godigo-session-stop  | Stop a machine session                                              |                     |
+| godigo-session-sync  | Sync a machine session                                              |                     |
 
 # Usage
 
