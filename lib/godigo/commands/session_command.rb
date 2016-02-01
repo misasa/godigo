@@ -15,7 +15,7 @@ module Godigo::Commands
 						Start or stop machine session.  This also offers backup interface.
 						Action can be `start', `stop', and `sync'.  Machine and
 						machine-server should be specified in a configuration file as inferred
-                        later.
+						later.
 
 						start, stop
 						  Start or stop the machin on machine-server to log status
@@ -26,7 +26,7 @@ module Godigo::Commands
 
 					EXAMPLE OF CONFIGURATION FILE `~/.godigorc'
 						## godigo-session start/stop
-                        machine: 6UHP-70
+						machine: 6UHP-70
 						uri_machine: database.misasa.okayama-u.ac.jp/machine
                         ## godigo-session sync
 						src_path: C:/Users/dream/Desktop/deleteme.d
@@ -42,12 +42,13 @@ module Godigo::Commands
 						License GPLv3+: GNU GPL version 3 or later
 
                     HISTORY
-                        October 1, 2015: Documentated by Tak Kunihiro
+						October 1, 2015: Documentated by Tak Kunihiro
+						February 1, 2016: Revise document by Tak Kunihiro
 
 					OPTIONS
 				EOS
 				opt.on("-v", "--[no-]verbose", "Run verbosely") {|v| OPTS[:verbose] = v}				
-				opt.on("-m", "--message", "Add information") {|v| OPTS[:message] = v}
+				opt.on("-m", "--message", "Add information on start") {|v| OPTS[:message] = v}
 				opt.on("-o", "--open", "Open by web browser") {|v| OPTS[:web] = v}
 			end
 			opts
@@ -88,7 +89,7 @@ module Godigo::Commands
 		def start_session
 			machine = get_machine
 			if machine.is_running?
-		    	stdout.print "Session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
+		    	stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
 	    	    answer = (stdin.gets)[0].downcase
 		    	if answer == "y" or answer == "\n"
 					machine.stop
