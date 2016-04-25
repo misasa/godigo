@@ -135,7 +135,7 @@ module Godigo::Commands
 			end
 		end
 
-		describe "start_session" do
+		describe "start_session", :current => true do
 			subject { cui.start_session }
 			let(:args){ [] }
 			let(:machine_obj){ double('machine', :name => "TEST-111").as_null_object }
@@ -160,7 +160,7 @@ module Godigo::Commands
 				end
 
 				it {
-					expect(stdout).to receive(:print).with("Session |TEST-111| exists.  Do you want to close and start a new session? [Y/n] ")
+					expect(stdout).to receive(:print).with("An open session |TEST-111| exists.  Do you want to close and start a new session? [Y/n] ")
 					expect{ subject }.to raise_error(SystemExit)
 				}
 				context "with answer yes" do
