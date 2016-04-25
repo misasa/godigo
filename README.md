@@ -36,6 +36,22 @@ Commands are summarized as:
 
 See online document with option `--help`.
 
+# Developer's guide
+
+1. Run test
+
+    $ cd ~/devel-godigo/gems/godigo
+    $ bundle exec rspec spec/godigo/commands/session_command_spec.rb --tag show_help:true
+
+2. Push to the Git server
+
+3. Access to Jenkins server http://devel.misasa.okayama-u.ac.jp/jenkins/job/Godigo/ and run a job.  This is scheduled and if you are not in hurry, skip further steps.
+
+4. Uninstall and install local gem module by
+
+    $ sudo gem uninstall godigo
+    $ sudo gem install godigo
+
 # Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/godigo/fork )
