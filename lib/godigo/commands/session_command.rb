@@ -6,31 +6,36 @@ module Godigo::Commands
 	  opts = OptionParser.new do |opt|
 		opt.banner = <<-"EOS".unindent
 NAME
-  #{program_name} - Start or stop machine session
+  #{program_name} - Keep track of machine status
 
 SYNOPSIS
-  #{program_name} action [options]
+  #{program_name} action [options...]
 
 DESCRIPTION
-  Start or stop machine session.  This also offers interface for
-  synchronization.
-  Action can be `start', `stop', and `sync'.  Machine and
-  machine-server should be specified in a configuration file as inferred
-  later.
+  Keep track of machine status.  This also offers interface for
+  synchronization.  Action can be `start', `stop', and `sync'.
+  Machine and machine-server should be specified in a configuration
+  file `~/.godigorc' as inferred later.
 
-  start, stop
-    Start or stop the machin on machine-server to log status
+  start
+    Start `machin' on machine-server to log status
+
+  stop
+    Stop `machin' on machine-server to log status and issue `sync'
 
   sync
-    Synchronize to remote directory specified in a configuration
-    file.  The action invokes `rsync' as sub-process as shown below.
+    Synchronize local directory to remote directory specified in a
+    configuration file.  The action invokes `rsync' as sub-process
+    when paramters `src_path' and `dst_path' are found in the
+    configuration file.  Options involved are showno below.
+
     $ rsync -avh --delete -e ssh ${src_path} ${dst_path}
 
-EXAMPLE OF CONFIGURATION FILE `~/.godigorc'
-  ## godigo-session start/stop
-  machine: 6UHP-70
+EXAMPLE OF CONFIGURATION FILE
+  ## machine config
   uri_machine: database.misasa.okayama-u.ac.jp/machine
-  ## godigo-session sync
+  machine: JSM-7001F-LV
+  ## rsync config
   src_path: C:/Users/dream/Desktop/deleteme.d
   dst_path: falcon@itokawa.misasa.okayama-u.ac.jp:/home/falcon/deleteme.d
 
@@ -40,12 +45,13 @@ SEE ALSO
 
 IMPLEMENTATION
   Orochi, version 9
-  Copyright (C) 2015 Okayama University
+  Copyright (C) 2015-2016 Okayama University
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
   October 1, 2015: Documentated by Tak Kunihiro
   February 1, 2016: Revise document by Tak Kunihiro
+  April 26, 2016: Documentation updated to be more correct
 
 OPTIONS
 EOS
