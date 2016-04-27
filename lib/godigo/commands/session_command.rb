@@ -15,20 +15,23 @@ DESCRIPTION
   Keep track of machine status.  This also offers interface for
   synchronization.  Action can be `start', `stop', and `sync'.
   Machine and machine-server should be specified in a configuration
-  file `~/.godigorc' as inferred later.
+  file `~/.godigorc' as inferred later.  Note that for each action,
+  dedicated application is prepared to be invoked from MS Windows.
 
   start
-    Start `machin' on machine-server to log status
+    Start `machin' on machine-server to log status.  To
+    invoke #{program_name}-start does the same thing.
 
   stop
-    Stop `machin' on machine-server to log status and issue `sync'
+    Stop `machin' on machine-server to log status and issue `sync'.
+    To invoke #{program_name}-stop does the same thing.
 
   sync
     Synchronize local directory to remote directory specified in a
     configuration file.  The action invokes `rsync' as sub-process
     when paramters `src_path' and `dst_path' are found in the
-    configuration file.  Options involved are showno below.
-
+    configuration file.  To invoke #{program_name}-sync does the same
+    thing.  Options involved are showno below.
     $ rsync -avh --delete -e ssh ${src_path} ${dst_path}
 
 EXAMPLE OF CONFIGURATION FILE
