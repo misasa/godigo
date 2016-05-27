@@ -143,12 +143,21 @@ EOS
 	  MachineTimeClient.config
 	end
 
+   
 	def checkpoint
 	  _path = get_src_path
-	  if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
-		_path = _path.gsub(/\/cygdrive\/c\/Users/,"C:/Users")
-		_path = _path.gsub!(/\//,"\\")
-	  end
+      #	  if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
+ 	  if platform =~ /mswin(?!ce)|mingw|bccwin/ # when Ruby is on Windows-NT (mingw) not on Cygwin
+		# _path = _path.gsub(/\/cygdrive\/c\/Users/,"C:/Users")
+		# _path = _path.gsub!(/\//,"\\")
+		_path.gsub!("/cygdrive/c/Users","C:/Users")
+		_path.gsub!("/cygdrive/t","T:")
+		_path.gsub!("/cygdrive/u","U:")
+		_path.gsub!("/cygdrive/v","V:")
+		_path.gsub!("/cygdrive/x","X:")
+		_path.gsub!("/cygdrive/y","Y:")
+		_path.gsub!("/cygdrive/z","Z:")
+ 	  end
 	  File.join(_path, 'checkpoint.org')
 	end
 

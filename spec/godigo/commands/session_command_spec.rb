@@ -91,6 +91,32 @@ module Godigo::Commands
 
 		end
 
+        describe "checkpoint", :current => true do
+          subject { cui.checkpoint }
+          let(:args){ [] }
+     	  let(:config){ {:dst_path => "user@example.com:~/", :src_path => "/cygdrive/u/Users/"} }
+          before do
+            allow(cui).to receive(:config).and_return(config)
+          end
+          context "on cygwin" do
+            before do
+              allow(cui).to receive(:platform).and_return("cygwin")
+            end
+            it {
+              expect(subject).to be_eql("/cygdrive/u/Users/checkpoint.org")
+            }
+          end
+          
+          context "on mingw" do
+            before do
+              allow(cui).to receive(:platform).and_return("mingw")
+            end
+            it {
+              expect(subject).to be_eql("U:/Users/checkpoint.org")
+            }
+          end
+        end
+        
 		describe "sync_session" do
 			subject { cui.sync_session }
 			let(:args){ [] }
