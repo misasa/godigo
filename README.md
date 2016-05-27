@@ -38,16 +38,26 @@ See online document with option `--help`.
 
 # Developer's guide
 
-1. Run test
+1. This project is hosted in the Git server ( http://devel.misasa.okayama-u.ac.jp/gitlab/gems/godigo/tree/master ).
+
+2. Run test.
 
     $ cd ~/devel-godigo/gems/godigo
     $ bundle exec rspec spec/godigo/commands/session_command_spec.rb --tag show_help:true
 
-2. Push to the Git server
+3. Push to the Git server.
 
-3. Access to Jenkins server http://devel.misasa.okayama-u.ac.jp/jenkins/job/Godigo/ and run a job.  This is scheduled and if you are not in hurry, skip further steps.
+4. Access the Jenkins server ( http://devel.misasa.okayama-u.ac.jp/jenkins/job/Godigo/ ), login,
+   and run a job.  This is scheduled and if you are not in hurry, skip
+   this and the next step.
 
-4. Uninstall and install local gem module by
+5. Update DREAM's homepage to have the newest gem available.
+
+    $ ssh falcon@dream.misasa.okayama-u.ac.jp
+    dream$ cd public_html/dream/documentation
+    dream$ git pull
+
+6. Uninstall and install gem module locally by following command.
 
     $ sudo gem uninstall godigo
     $ sudo gem install godigo
