@@ -125,15 +125,29 @@ module Godigo::Commands
 			let(:config){ {:dst_path => "user@example.com:~/", :src_path => "C:/Users/dream/Desktop/deleteme.d"} }
 			before do
 				allow(cui).to receive(:config).and_return(config)
-				allow(cui).to receive(:checkpoint_exists?).and_return(true)
+				#allow(cui).to receive(:checkpoint_exists?).and_return(true)
 			end
 			it {
+              expect(File).to receive(:exists?).with("#{File.join(config[:src_path], "checkpoint.org")}").and_return(true)
 				expect(stdout).to receive(:print).with("Are you sure you want to copy #{config[:src_path]} to #{config[:dst_path]}? [Y/n] ")
 				expect(stdin).to receive(:gets).and_return("y\n")
 				expect(cui).to receive(:system_execute).with("rsync -avh --delete -e ssh #{config[:src_path]} #{config[:dst_path]}")
 				subject
 			}
 
+            context "on mingw" do
+              let(:config){ {:dst_path => "user@example.com:~/", :src_path => "/cygdrive/u"} }
+              before do
+                allow(cui).to receive(:platform).and_return("mingw")
+              end
+              it {
+                expect(File).to receive(:exists?).with("U:/checkpoint.org").and_return(true)
+                expect(stdout).to receive(:print).with("Are you sure you want to copy /cygdrive/u to user@example.com:~/? [Y/n] ")
+                expect(stdin).to receive(:gets).and_return("y\n")
+                expect(cui).to receive(:system_execute).with("rsync -avh --delete -e ssh /cygdrive/u user@example.com:~/")
+				subject
+              }
+            end
 
 			context "without dst_path" do
 				let(:config){ {} }

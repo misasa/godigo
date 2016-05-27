@@ -145,7 +145,7 @@ EOS
 
    
 	def checkpoint
-	  _path = get_src_path
+	  _path = get_src_path.clone
       #	  if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
  	  if platform =~ /mswin(?!ce)|mingw|bccwin/ # when Ruby is on Windows-NT (mingw) not on Cygwin
 		# _path = _path.gsub(/\/cygdrive\/c\/Users/,"C:/Users")
