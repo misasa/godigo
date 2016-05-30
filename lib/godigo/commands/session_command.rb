@@ -34,17 +34,31 @@ DESCRIPTION
     thing.  Options involved are showno below.
     $ rsync -avh --delete -e ssh ${src_path} ${dst_path}
 
+SETUP FOR SYNC
+  (1) On Windows, mount a source directory with proper volume name
+      such as "U:/".
+  (2) Make sure if rsync in installed somewhere discoverable.  In a
+      case of Windows, to use rsync on Cygwin is an option.
+  (3) Find out how the directory is spelled.  For a case where
+      volumme "U:/" on Windows is the source, the directory is
+      referred as "/cygdrive/u/" on Cygwin.  Place it onto :src_path:
+      in the configuration file.
+  (4) Create a directory in a server with proper permission.  Place
+      the ssh-based URL onto :dst_path: in the configuration file.
+  (5) Setup ssh key to access to the server without authorization.
+
 EXAMPLE OF CONFIGURATION FILE
   ## machine config
   uri_machine: database.misasa.okayama-u.ac.jp/machine
   machine: JSM-7001F-LV
-  ## rsync config
-  src_path: C:/Users/dream/Desktop/deleteme.d
-  dst_path: falcon@itokawa.misasa.okayama-u.ac.jp:/home/falcon/deleteme.d
+  ## sync config
+  src_path: /cygdrive/u/
+  dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-LV/sync/
 
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
+  rsync
 
 IMPLEMENTATION
   Orochi, version 9
