@@ -36,7 +36,8 @@ DESCRIPTION
 
 SETUP FOR SYNC
   (1) On Windows, mount a source directory with proper volume name
-      such as "U:/".
+      such as "U:/".  On the top directory, place a file
+      `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
       case of Windows, to use rsync on Cygwin is an option.
   (3) Find out how the directory is spelled.  For a case where
