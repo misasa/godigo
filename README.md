@@ -42,8 +42,10 @@ See online document with option `--help`.
 
 2. Run test.
 
-    $ cd ~/devel-godigo/gems/godigo
-    $ bundle exec rspec spec/godigo/commands/session_command_spec.rb --tag show_help:true
+```
+$ cd ~/devel-godigo/gems/godigo
+$ bundle exec rspec spec/godigo/commands/session_command_spec.rb --tag show_help:true
+```
 
 3. Push to the Git server.
 
@@ -53,9 +55,11 @@ See online document with option `--help`.
 
 5. Update DREAM's homepage to have the newest gem available.
 
-    $ ssh falcon@dream.misasa.okayama-u.ac.jp
-    dream$ cd public_html/dream/documentation
-    dream$ git pull
+```
+$ ssh falcon@dream.misasa.okayama-u.ac.jp
+dream$ cd public_html/dream/documentation
+dream$ git pull
+```
 
 6. Uninstall and install gem module locally by following command.
 
