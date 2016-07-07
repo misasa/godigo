@@ -4,7 +4,7 @@ Start or stop machine session
 
 # Dependency
 
-## [machine_time_client](http://devel.misasa.okayama-u.ac.jp/gitlab/gems/machine_time_client/tree/master "follow instruction")
+## [machine_time_client](https://github.com/misasa/machine_time_client "follow instruction")
 
 # Installation
 
@@ -61,11 +61,3 @@ See online document with option `--help`.
 
     $ sudo gem uninstall godigo
     $ sudo gem install godigo
-
-# Contributing
-
-1. Fork it ( https://github.com/[my-github-username]/godigo/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
