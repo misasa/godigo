@@ -32,7 +32,7 @@ DESCRIPTION
     when paramters `src_path' and `dst_path' are found in the
     configuration file.  To invoke #{program_name}-sync does the same
     thing.  Options involved are showno below.
-    $ rsync -avh --delete -e ssh ${src_path} ${dst_path}
+    $ rsync -rltgoDvh --delete -e ssh ${src_path} ${dst_path}
 
 SETUP FOR SYNC
   (1) On Windows, mount a source directory with proper volume name
@@ -67,9 +67,10 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
-  October 1, 2015: Documentated by Tak Kunihiro
-  February 1, 2016: Revise document by Tak Kunihiro
+  July 15, 2016: Change option for rsync from `-avh' to `-rltgoDvh'
   April 26, 2016: Documentation updated to be more correct
+  February 1, 2016: Revise document by Tak Kunihiro
+  October 1, 2015: Documentated by Tak Kunihiro
 
 OPTIONS
 EOS
@@ -158,14 +159,18 @@ EOS
 	  MachineTimeClient.config
 	end
 
-   
 	def checkpoint
 	  _path = get_src_path.clone
       #	  if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
  	  if platform =~ /mswin(?!ce)|mingw|bccwin/ # when Ruby is on Windows-NT (mingw) not on Cygwin
 		# _path = _path.gsub(/\/cygdrive\/c\/Users/,"C:/Users")
 		# _path = _path.gsub!(/\//,"\\")
-		_path.gsub!("/cygdrive/c/Users","C:/Users")
+		# _path.gsub!("/cygdrive/c/Users","C:/Users")
+		_path.gsub!("/cygdrive/c","C:")
+		_path.gsub!("/cygdrive/d","d:")
+		_path.gsub!("/cygdrive/e","e:")
+		_path.gsub!("/cygdrive/f","F:")
+		_path.gsub!("/cygdrive/g","G:")
 		_path.gsub!("/cygdrive/t","T:")
 		_path.gsub!("/cygdrive/u","U:")
 		_path.gsub!("/cygdrive/v","V:")
@@ -213,8 +218,9 @@ EOS
 	  stdout.print "Are you sure you want to copy #{src_path} to #{dst_path}? [Y/n] "
 	  answer = (stdin.gets)[0].downcase
 	  unless answer == "n"
-       	cmd = "rsync -avh --delete -e ssh #{src_path} #{dst_path}"
-       	#stdout.puts cmd
+       	# cmd = "rsync -avh --delete -e ssh #{src_path} #{dst_path}"
+       	cmd = "rsync -rltgoDvh --delete -e ssh #{src_path} #{dst_path}" # -a == -rlptgoD
+       	stdout.print "--> I issued |#{cmd}|"
        	system_execute(cmd)
       end
 	end
