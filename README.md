@@ -25,12 +25,12 @@ Or install it yourself as:
 
 Commands are summarized as:
 
-| command              | description                                                         | note                |
-|----------------------|---------------------------------------------------------------------|---------------------|
-| godigo-session       | Start, stop, or sync machine session                                |                     |
-| godigo-session-start | Start a machine session                                             |                     |
-| godigo-session-stop  | Stop a machine session                                              |                     |
-| godigo-session-sync  | Sync a machine session                                              |                     |
+| command              | description                          | note                |
+|----------------------|--------------------------------------|---------------------|
+| godigo-session       | Start, stop, or sync machine session |                     |
+| godigo-session-start | Start a machine session              |                     |
+| godigo-session-stop  | Stop a machine session               |                     |
+| godigo-session-sync  | Sync a machine session               |                     |
 
 # Usage
 
