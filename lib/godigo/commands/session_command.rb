@@ -39,11 +39,11 @@ SETUP FOR SYNC
       such as "U:/".  On the top directory, place a file
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
-      case of Windows, to use rsync on Cygwin is an option.
-  (3) Find out how the directory is spelled.  For a case where
-      volumme "U:/" on Windows is the source, the directory is
-      referred as "/cygdrive/u/" on Cygwin.  Place it onto :src_path:
-      in the configuration file.
+      case of Windows, to use rsync on Cygwin is recommended.
+  (3) Find out how the directory is spelled.  For a case where volumme
+      "U:/" on Windows is the source, the directory should be referred
+      as "/cygdrive/u/" for rsync on Cygwin.  Place it on :src_path:
+      of the configuration file.
   (4) Create a directory in a server with proper permission.  Place
       the ssh-based URL onto :dst_path: in the configuration file.
   (5) Setup ssh key to access to the server without authorization.
