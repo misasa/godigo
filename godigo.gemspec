@@ -33,6 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov-rcov"
   spec.add_development_dependency "rspec_junit_formatter"
 
-  spec.add_dependency "machine_time_client", "~> 0.1"
+  spec.add_dependency "machine_time_client", "~> 1.0"
   spec.add_dependency 'unindent'
 end
