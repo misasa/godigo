@@ -19,20 +19,34 @@ DESCRIPTION
   dedicated application is prepared to be invoked from MS Windows.
 
   start
-    Start `machin' on machine-server to log status.  To
+    Start `machine' on machine-server to log status.  To
     invoke #{program_name}-start does the same thing.
 
   stop
-    Stop `machin' on machine-server to log status and issue `sync'.
+    Stop `mach-in' on machine-server to log status and issue `sync'.
     To invoke #{program_name}-stop does the same thing.
 
   sync
     Synchronize local directory to remote directory specified in a
     configuration file.  The action invokes `rsync' as sub-process
-    when paramters `src_path' and `dst_path' are found in the
+    when parameters `src_path' and `dst_path' are found in the
     configuration file.  To invoke #{program_name}-sync does the same
-    thing.  Options involved are showno below.
+    thing.  Options involved are shown below.
     $ rsync -rltgoDvh --delete -e ssh ${src_path} ${dst_path}
+
+TROUBLESHOOT
+    Time to time, you see error messages as shown below.
+
+      rsync: recv_generator: mkdir "/backup/JSM-7001F-LV/sync/..." failed: Permission denied (13)
+      rsync: recv_generator: failed to stat "/backup/JSM-7001F...": Permission denied (13)
+
+    This is resulted from wrong permission of a certain directory of
+    the backup server.  It is not clear how that happens.  See
+    following example to fix the permission.
+
+      $ ssh falcon@archive.misasa.okayama-u.ac.jp
+      archive$ cd /backup/JSM-7001F-LV/sync/
+      archive$ chmod a+rwx -R *
 
 SETUP FOR SYNC
   (1) On Windows, mount a source directory with proper volume name
@@ -40,7 +54,7 @@ SETUP FOR SYNC
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
       case of Windows, to use rsync on Cygwin is recommended.
-  (3) Find out how the directory is spelled.  For a case where volumme
+  (3) Find out how the directory is spelled.  For a case where volume
       "U:/" on Windows is the source, the directory should be referred
       as "/cygdrive/u/" for rsync on Cygwin.  Place it on :src_path:
       of the configuration file.
@@ -67,10 +81,11 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  October 3, 2017: Add a section trouble shoot.
   July 15, 2016: Change option for rsync from `-avh' to `-rltgoDvh'
   April 26, 2016: Documentation updated to be more correct
   February 1, 2016: Revise document by Tak Kunihiro
-  October 1, 2015: Documentated by Tak Kunihiro
+  October 1, 2015: Documented by Tak Kunihiro
 
 OPTIONS
 EOS
