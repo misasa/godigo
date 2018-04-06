@@ -4,7 +4,7 @@ Ruby package to start and stop a session of a machine-gazer from command line
 
 # Dependency
 
-## [machine_time_client](https://github.com/misasa/machine_time_client "follow instruction")
+## [gem package -- machine_time_client](https://github.com/misasa/machine_time_client "follow instruction")
 
 # Installation
 
