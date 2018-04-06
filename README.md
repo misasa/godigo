@@ -1,4 +1,4 @@
-# godigo
+# gem package -- godigo
 
 Ruby package to start and stop a session of a machine-gazer from command line
 
