@@ -1,6 +1,6 @@
 # godigo
 
-Start or stop machine session
+Ruby package to start and stop a session of a machine-gazer from command line
 
 # Dependency
 
