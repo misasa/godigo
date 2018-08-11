@@ -1,6 +1,14 @@
 # gem package -- godigo
 
-Ruby package to start and stop a session of a machine-gazer from command line
+Ruby package with command-line utilities to start and stop a session on a machine-gazer
+
+# Description
+
+Ruby package with command-line utilities to start and stop a session
+on a machine-gazer [rails project --
+machine_time](https://github.com/misasa/machine_time).  Keep track of
+machine status.  This also offers interface for synchronization.
+Action can be `start', `stop', and `sync'.
 
 # Dependency
 
