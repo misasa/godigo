@@ -1,6 +1,7 @@
 # gem package -- godigo
 
-Ruby package with command-line client utilities to start and stop a session on a machine-gazer
+Ruby package with command-line client utilities to start and stop a
+session on a machine-gazer
 
 # Description
 
