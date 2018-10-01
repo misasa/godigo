@@ -1,9 +1,9 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'godigo'
-require 'simplecov'
-require 'simplecov-rcov'
-SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
-SimpleCov.start
+#require 'simplecov'
+#require 'simplecov-rcov'
+#SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+#SimpleCov.start
 
 class Output
   def messages

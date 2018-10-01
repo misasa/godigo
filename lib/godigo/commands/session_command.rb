@@ -2,9 +2,9 @@ require 'open3'
 require 'godigo/cui'
 module Godigo::Commands
   class SessionCommand < Godigo::Cui
-	def option_parser
-	  opts = OptionParser.new do |opt|
-		opt.banner = <<-"EOS".unindent
+    def option_parser
+      opts = OptionParser.new do |opt|
+      opt.banner = <<-"EOS".unindent
 NAME
   #{program_name} - Keep track of machine status
 
@@ -32,7 +32,7 @@ DESCRIPTION
     when parameters `src_path' and `dst_path' are found in the
     configuration file.  To invoke #{program_name}-sync does the same
     thing.  Options involved are shown below.
-    $ rsync -rltgoDvh --delete -e ssh ${src_path} ${dst_path}
+    $ cd ${src_path} && rsync -rltgoDvh --delete -e ssh ./* ${dst_path}
 
 TROUBLESHOOT
     Time to time, you see error messages as shown below.
@@ -81,6 +81,7 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  October 1, 2018: Change strategy for rsync to support MSYS
   October 3, 2017: Add a section trouble shoot.
   July 15, 2016: Change option for rsync from `-avh' to `-rltgoDvh'
   April 26, 2016: Documentation updated to be more correct
@@ -89,168 +90,168 @@ HISTORY
 
 OPTIONS
 EOS
-		opt.on("-v", "--[no-]verbose", "Run verbosely") {|v| OPTS[:verbose] = v}
-		opt.on("-m", "--message", "Add information on start") {|v| OPTS[:message] = v}
-		opt.on("-o", "--open", "Open by web browser") {|v| OPTS[:web] = v}
-	  end
-	  opts
-	end
-
-	def get_machine
-	  MachineTimeClient::Machine.instance
-	end
-
-	def open_browser
-	  machine = get_machine
-	  url = "http://database.misasa.okayama-u.ac.jp/machine/machines/#{machine.id}"
-	  if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
-		system("start #{url}")
-	  elsif RUBY_PLATFORM.downcase =~ /cygwin/
-		system("cygstart #{url}")
-	  elsif RUBY_PLATFORM.downcase =~ /darwin/
-		system("open #{url}")
-	  else
-		raise
-	  end
-	end
-
-	def print_label(session)
-	  if RUBY_PLATFORM.downcase !~ /darwin/
-		cmd = "tepra print #{session.global_id},#{session.name}"
-		Open3.popen3(cmd) do |stdin, stdout, stderr|
-		  err = stderr.read
-		  unless err.blank?
-		    p err
-		  end
-		end
-		# system("tepra-duplicate")
-		# system("perl -S tepra-duplicate")
-	  end
-	end
-
-	def start_session
-	  machine = get_machine
-	  if machine.is_running?
-		stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
-	    answer = (stdin.gets)[0].downcase
-		if answer == "y" or answer == "\n"
-		  machine.stop
-		  machine.start
-		else
-		  exit
-		end
-	  else
-		machine.start
-	  end
-	  session = machine.current_session
-	  print_label session
-	  if OPTS[:message]
-		message = argv.shift
-		if message
-		  session.description = message
-		  session.save
-		end
-	  end
-	  stdout.puts session if OPTS[:verbose]
-
-	  if OPTS[:web]
-		open_browser
-	  end
-	end
-
-
-	def stop_session
-	  machine = get_machine
-	  if machine.is_running?
-		session = machine.current_session
-		stdout.puts session if OPTS[:verbose]
-		machine.stop
-		stdout.puts "Session closed"
-		sync_session
-	  end
-	end
-
-	def config
-	  MachineTimeClient.config
-	end
-
-	def checkpoint
-	  _path = get_src_path.clone
-      #	  if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
- 	  if platform =~ /mswin(?!ce)|mingw|bccwin/ # when Ruby is on Windows-NT (mingw) not on Cygwin
-		# _path = _path.gsub(/\/cygdrive\/c\/Users/,"C:/Users")
-		# _path = _path.gsub!(/\//,"\\")
-		# _path.gsub!("/cygdrive/c/Users","C:/Users")
-		_path.gsub!("/cygdrive/c","C:")
-		_path.gsub!("/cygdrive/d","d:")
-		_path.gsub!("/cygdrive/e","e:")
-		_path.gsub!("/cygdrive/f","F:")
-		_path.gsub!("/cygdrive/g","G:")
-		_path.gsub!("/cygdrive/t","T:")
-		_path.gsub!("/cygdrive/u","U:")
-		_path.gsub!("/cygdrive/v","V:")
-		_path.gsub!("/cygdrive/x","X:")
-		_path.gsub!("/cygdrive/y","Y:")
-		_path.gsub!("/cygdrive/z","Z:")
- 	  end
-	  File.join(_path, 'checkpoint.org')
-	end
-
-	def get_dst_path
-      #    dst_path: falcon@itokawa.misasa.okayama-u.ac.jp:/home/falcon/deleteme.d
-	  if config.has_key?(:dst_path)
-		_path = config[:dst_path]
-	  elsif config.has_key?('dst_path')
-		_path = config['dst_path']
-	  end
-	  unless _path
-		raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |dst_path|.  Put a line such like |dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/mymachine/sync|."
-	  end
-	  _path
-	end
-
-	def get_src_path
-      #    src_path: C:/Users/dream/Desktop/deleteme.d
-	  if config.has_key?(:src_path)
-		_path = config[:src_path]
-	  elsif config.has_key?('src_path')
-		_path = config['src_path']
-	  end
-	  unless _path
-		raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |src_path|.  Put a line such like |src_path: C:/Users/dream/Desktop/deleteme.d"
-	  end
-	  _path
-	end
-
-	def checkpoint_exists?
-	  File.exists? checkpoint
-	end
-
-	def sync_session
-	  dst_path = get_dst_path
-	  src_path = get_src_path
-	  raise "Could not find checkpoint file in #{checkpoint}." unless checkpoint_exists?
-	  stdout.print "Are you sure you want to copy #{src_path} to #{dst_path}? [Y/n] "
-	  answer = (stdin.gets)[0].downcase
-	  unless answer == "n"
-       	# cmd = "rsync -avh --delete -e ssh #{src_path} #{dst_path}"
-       	cmd = "rsync -rltgoDvh --delete -e ssh #{src_path} #{dst_path}" # -a == -rlptgoD
-       	stdout.print "--> I issued |#{cmd}|"
-       	system_execute(cmd)
+      opt.on("-v", "--[no-]verbose", "Run verbosely") {|v| OPTS[:verbose] = v}
+      opt.on("-m", "--message", "Add information on start") {|v| OPTS[:message] = v}
+      opt.on("-o", "--open", "Open by web browser") {|v| OPTS[:web] = v}
       end
-	end
+      opts
+    end
 
-	def execute
-	  subcommand =  argv.shift.downcase unless argv.empty?
-	  if subcommand =~ /start/
-  		start_session
-	  elsif subcommand =~ /stop/
-  		stop_session
-	  elsif subcommand =~ /sync/
-  		sync_session
-	  else
-		raise "invalid command!"
-	  end
-	end
+    def get_machine
+      MachineTimeClient::Machine.instance
+    end
+
+    def open_browser
+      machine = get_machine
+      url = "http://database.misasa.okayama-u.ac.jp/machine/machines/#{machine.id}"
+      if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
+      system("start #{url}")
+      elsif RUBY_PLATFORM.downcase =~ /cygwin/
+      system("cygstart #{url}")
+      elsif RUBY_PLATFORM.downcase =~ /darwin/
+      system("open #{url}")
+      else
+      raise
+      end
+    end
+
+    def print_label(session)
+      if RUBY_PLATFORM.downcase !~ /darwin/
+      cmd = "tepra print #{session.global_id},#{session.name}"
+      Open3.popen3(cmd) do |stdin, stdout, stderr|
+        err = stderr.read
+        unless err.blank?
+          p err
+        end
+      end
+      # system("tepra-duplicate")
+      # system("perl -S tepra-duplicate")
+      end
+    end
+
+    def start_session
+      machine = get_machine
+      if machine.is_running?
+      stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
+        answer = (stdin.gets)[0].downcase
+      if answer == "y" or answer == "\n"
+        machine.stop
+        machine.start
+      else
+        exit
+      end
+      else
+      machine.start
+      end
+      session = machine.current_session
+      print_label session
+      if OPTS[:message]
+      message = argv.shift
+      if message
+        session.description = message
+        session.save
+      end
+      end
+      stdout.puts session if OPTS[:verbose]
+
+      if OPTS[:web]
+      open_browser
+      end
+    end
+
+
+    def stop_session
+      machine = get_machine
+      if machine.is_running?
+      session = machine.current_session
+      stdout.puts session if OPTS[:verbose]
+      machine.stop
+      stdout.puts "Session closed"
+      sync_session
+      end
+    end
+
+    def config
+      MachineTimeClient.config
+    end
+
+    def checkpoint
+      _path = get_src_path.clone
+        #   if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|bccwin/
+      if platform =~ /mswin(?!ce)|mingw|bccwin/ # when Ruby is on Windows-NT (mingw) not on Cygwin
+      # _path = _path.gsub(/\/cygdrive\/c\/Users/,"C:/Users")
+      # _path = _path.gsub!(/\//,"\\")
+      # _path.gsub!("/cygdrive/c/Users","C:/Users")
+      _path.gsub!("/cygdrive/c","C:")
+      _path.gsub!("/cygdrive/d","d:")
+      _path.gsub!("/cygdrive/e","e:")
+      _path.gsub!("/cygdrive/f","F:")
+      _path.gsub!("/cygdrive/g","G:")
+      _path.gsub!("/cygdrive/t","T:")
+      _path.gsub!("/cygdrive/u","U:")
+      _path.gsub!("/cygdrive/v","V:")
+      _path.gsub!("/cygdrive/x","X:")
+      _path.gsub!("/cygdrive/y","Y:")
+      _path.gsub!("/cygdrive/z","Z:")
+      end
+      File.join(_path, 'checkpoint.org')
+    end
+
+    def get_dst_path
+        #    dst_path: falcon@itokawa.misasa.okayama-u.ac.jp:/home/falcon/deleteme.d
+      if config.has_key?(:dst_path)
+      _path = config[:dst_path]
+      elsif config.has_key?('dst_path')
+      _path = config['dst_path']
+      end
+      unless _path
+      raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |dst_path|.  Put a line such like |dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/mymachine/sync|."
+      end
+      _path
+    end
+
+    def get_src_path
+        #    src_path: C:/Users/dream/Desktop/deleteme.d
+      if config.has_key?(:src_path)
+      _path = config[:src_path]
+      elsif config.has_key?('src_path')
+      _path = config['src_path']
+      end
+      unless _path
+      raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |src_path|.  Put a line such like |src_path: C:/Users/dream/Desktop/deleteme.d"
+      end
+      _path
+    end
+
+    def checkpoint_exists?
+      File.exists? checkpoint
+    end
+
+    def sync_session
+      dst_path = get_dst_path
+      src_path = get_src_path
+      raise "Could not find checkpoint file in #{checkpoint}." unless checkpoint_exists?
+      stdout.print "Are you sure you want to copy #{src_path} to #{dst_path}? [Y/n] "
+      answer = (stdin.gets)[0].downcase
+      unless answer == "n"
+          # cmd = "rsync -avh --delete -e ssh #{src_path} #{dst_path}"
+          cmd = "cd #{src_path} && rsync -rltgoDvh --delete -e ssh ./* #{dst_path}" # -a == -rlptgoD
+          stdout.print "--> I issued |#{cmd}|"
+          system_execute(cmd)
+        end
+    end
+
+    def execute
+      subcommand =  argv.shift.downcase unless argv.empty?
+      if subcommand =~ /start/
+        start_session
+      elsif subcommand =~ /stop/
+        stop_session
+      elsif subcommand =~ /sync/
+        sync_session
+      else
+      raise "invalid command!"
+      end
+    end
   end
 end
