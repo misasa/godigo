@@ -81,7 +81,8 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
-  October 1, 2018: Change strategy for rsync to support MSYS
+  October 4, 2018: Support src_path with drive letter
+  October 1, 2018: Change strategy for sync to support MSYS
   October 3, 2017: Add a section trouble shoot.
   July 15, 2016: Change option for rsync from `-avh' to `-rltgoDvh'
   April 26, 2016: Documentation updated to be more correct
@@ -213,18 +214,30 @@ EOS
     def get_src_path
         #    src_path: C:/Users/dream/Desktop/deleteme.d
       if config.has_key?(:src_path)
-      _path = config[:src_path]
+        _path = config[:src_path]
       elsif config.has_key?('src_path')
-      _path = config['src_path']
+        _path = config['src_path']
       end
       unless _path
-      raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |src_path|.  Put a line such like |src_path: C:/Users/dream/Desktop/deleteme.d"
+        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |src_path|.  Put a line such like |src_path: C:/Users/dream/Desktop/deleteme.d"
       end
       _path
     end
 
     def checkpoint_exists?
       File.exists? checkpoint
+    end
+
+    def sync_command
+      dst_path = get_dst_path
+      src_path = get_src_path
+      cmd = "cd "
+      if src_path =~ /[A-Z]\:/ # when path include drive letter
+        cmd += "/d #{src_path} && "
+      else
+        cmd = "cd #{src_path} && "
+      end
+      cmd = cmd + "rsync -rltgoDvh --delete -e ssh ./* #{dst_path}" # -a == -rlptgoD
     end
 
     def sync_session
@@ -235,7 +248,8 @@ EOS
       answer = (stdin.gets)[0].downcase
       unless answer == "n"
           # cmd = "rsync -avh --delete -e ssh #{src_path} #{dst_path}"
-          cmd = "cd #{src_path} && rsync -rltgoDvh --delete -e ssh ./* #{dst_path}" # -a == -rlptgoD
+          # cmd = "cd #{src_path} && rsync -rltgoDvh --delete -e ssh ./* #{dst_path}" # -a == -rlptgoD
+          cmd = sync_command
           stdout.print "--> I issued |#{cmd}|"
           system_execute(cmd)
         end
