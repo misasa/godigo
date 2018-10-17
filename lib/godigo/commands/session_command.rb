@@ -237,7 +237,7 @@ EOS
       else
         cmd = "cd #{src_path} && "
       end
-      cmd = cmd + "rsync -rltgoDvh --delete -e ssh ./* #{dst_path}" # -a == -rlptgoD
+      cmd = cmd + "rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{dst_path}" # -a == -rlptgoD
     end
 
     def sync_session
