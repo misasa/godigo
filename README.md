@@ -54,7 +54,7 @@ See online document with option `--help`.
 2. Run test.
 
 ```
-$ cd ~/devel-godigo/gems/godigo
+$ cd ~/devel-fudo/gems/godigo
 $ bundle exec rspec spec/godigo/commands/session_command_spec.rb --tag show_help:true
 ```
 
