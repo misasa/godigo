@@ -19,15 +19,7 @@ Action can be `start`, `stop`, and `sync`.
 
 # Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'godigo'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Install the package by yourself as:
 
     $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems
     $ gem install godigo
