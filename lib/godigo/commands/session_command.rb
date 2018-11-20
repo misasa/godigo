@@ -170,6 +170,10 @@ EOS
       stdout.puts "Session closed"
       sync_session
       end
+
+      if OPTS[:web]
+      open_browser
+      end
     end
 
     def config
