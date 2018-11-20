@@ -160,7 +160,6 @@ EOS
       end
     end
 
-
     def stop_session
       machine = get_machine
       if machine.is_running?
@@ -169,10 +168,6 @@ EOS
       machine.stop
       stdout.puts "Session closed"
       sync_session
-      end
-
-      if OPTS[:web]
-      open_browser
       end
     end
 
