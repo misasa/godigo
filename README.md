@@ -2,7 +2,7 @@
 
 Ruby package with command-line client utilities to start and stop a
 session on a machine-gazer [rails project -- machine_time](https://github.com/misasa/machine_time).  The utilities
-keep track of machine status.  This package also offers interface for
+help to keep track of machine status.  This package also offers interface for
 synchronization.  Action can be start, stop, and sync.
 
 # Description
