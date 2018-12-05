@@ -16,6 +16,8 @@ Action can be `start`, `stop`, and `sync`.
 
 ## [gem package -- machine_time_client](https://github.com/misasa/machine_time_client "follow instruction")
 
+## [gem package -- tepra](https://github.com/misasa/tepra)
+
 # Installation
 
 Install the package by yourself as:
