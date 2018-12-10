@@ -22,7 +22,7 @@ Action can be `start`, `stop`, and `sync`.
 
 Install the package by yourself as:
 
-    $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems
+    $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     $ gem install godigo
 
 # Commands
