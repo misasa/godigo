@@ -1,15 +1,16 @@
 # gem package -- godigo
 
 Ruby package with command-line client utilities to start and stop a
-session on a machine-gazer [rails project -- machine_time](https://github.com/misasa/machine_time).  The utilities help to keep track of machine status.  This package also offers interface for
-synchronization of datasets.  Action can be start, stop, and sync.
+session on a machine-gazer [rails project -- machine_time](https://github.com/misasa/machine_time).
 
 # Description
 
 Ruby package with command-line client utilities to start and stop a
 session on a machine-gazer [rails project --
-machine_time](https://github.com/misasa/machine_time).  Keep track of
-machine status.  This also offers interface for synchronization.
+machine_time](https://github.com/misasa/machine_time).
+The utilities help to keep track of machine status.
+
+This package also offers interface for synchronization of local data files.
 Action can be `start`, `stop`, and `sync`.
 
 # Dependency
@@ -17,6 +18,13 @@ Action can be `start`, `stop`, and `sync`.
 ## [gem package -- machine_time_client](https://github.com/misasa/machine_time_client "follow instruction")
 
 ## [gem package -- tepra](https://github.com/misasa/tepra)
+
+## [rsync](https://rsync.samba.org/)
+
+If you call `rsync` on MSYS2, make sure if `ssh` for MSYS2 is available.
+Following commands will help to find out what do you call.
+    CMD> where rsync
+    CMD> where ssh
 
 # Installation
 
