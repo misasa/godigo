@@ -23,6 +23,7 @@ Action can be `start`, `stop`, and `sync`.
 
 If you call `rsync` on MSYS2, make sure if `ssh` for MSYS2 is available.
 Following commands will help to find out what do you call.
+
     CMD> where rsync
     CMD> where ssh
 
