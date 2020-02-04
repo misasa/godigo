@@ -74,10 +74,11 @@ SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
   rsync
+  https://github.com/misasa/godigo/blob/master/lib/godigo/commands/session_command.rb
 
 IMPLEMENTATION
   Orochi, version 9
-  Copyright (C) 2015-2016 Okayama University
+  Copyright (C) 2015-2020 Okayama University
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
