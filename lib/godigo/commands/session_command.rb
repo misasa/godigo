@@ -69,6 +69,7 @@ EXAMPLE OF CONFIGURATION FILE
   ## sync config
   src_path: /cygdrive/u/
   dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-LV/sync/
+  #rsync_path: /usr/bin/rsync
 
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
@@ -231,13 +232,17 @@ EOS
     def sync_command
       dst_path = get_dst_path
       src_path = get_src_path
+      rsync_path = "rsync"
+      if config.has_key?(:rsync_path)
+        rsync_path = config[:rsync_path]
+      end
       cmd = "cd "
       if src_path =~ /[A-Z]\:/ # when path include drive letter
         cmd += "/d #{src_path} && "
       else
         cmd = "cd #{src_path} && "
       end
-      cmd = cmd + "rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{dst_path}" # -a == -rlptgoD
+      cmd = cmd + "#{rsync_path} -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{dst_path}" # -a == -rlptgoD
     end
 
     def sync_session
