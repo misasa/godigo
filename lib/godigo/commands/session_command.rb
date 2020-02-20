@@ -48,6 +48,11 @@ TROUBLESHOOT
       archive$ cd /backup/JSM-7001F-LV/sync/
       archive$ chmod a+rwx -R *
 
+WHY GODIGO DOESN'T WORK
+    :Y drive not recognized.
+　   Missing `checkpoint.org 'file.
+     Some `rsync 'files are conflicting.
+      
 SETUP FOR SYNC
   (1) On Windows, mount a source directory with proper volume name
       such as "Y:/".  On the top directory, place a file
@@ -76,11 +81,6 @@ SEE ALSO
   TimeBokan
   rsync
   https://github.com/misasa/godigo/blob/master/lib/godigo/commands/session_command.rb
-
-WHY GODIGO DOESN'T WORK
-  :Y drive not recognized.
-　 Missing `checkpoint.org 'file.
-  Some `rsync 'files are conflicting.
 
 IMPLEMENTATION
   Orochi, version 9
