@@ -50,13 +50,13 @@ TROUBLESHOOT
 
 SETUP FOR SYNC
   (1) On Windows, mount a source directory with proper volume name
-      such as "U:/".  On the top directory, place a file
+      such as "Y:/".  On the top directory, place a file
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
       case of Windows, to use rsync on Cygwin is recommended.
   (3) Find out how the directory is spelled.  For a case where volume
-      "U:/" on Windows is the source, the directory should be referred
-      as "/cygdrive/u/" for rsync on Cygwin.  Place it on :src_path:
+      "Y:/" on Windows is the source, the directory should be referred
+      as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path:
       of the configuration file.
   (4) Create a directory in a server with proper permission.  Place
       the ssh-based URL onto :dst_path: in the configuration file.
@@ -67,7 +67,7 @@ EXAMPLE OF CONFIGURATION FILE
   uri_machine: database.misasa.okayama-u.ac.jp/machine
   machine: JSM-7001F-LV
   ## sync config
-  src_path: /cygdrive/u/
+  src_path: /cygdrive/Y/
   dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-LV/sync/
   #rsync_path: /usr/bin/rsync
 
@@ -77,12 +77,18 @@ SEE ALSO
   rsync
   https://github.com/misasa/godigo/blob/master/lib/godigo/commands/session_command.rb
 
+WHY GODIGO DOESN'T WORK
+  :Y drive not recognized.
+　 Missing `checkpoint.org 'file.
+  Some `rsync 'files are conflicting.
+
 IMPLEMENTATION
   Orochi, version 9
   Copyright (C) 2015-2020 Okayama University
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  February 20, 2020: Revised to be able to specify the path to rsync
   October 4, 2018: Support src_path with drive letter
   October 1, 2018: Change strategy for sync to support MSYS
   October 3, 2017: Add a section trouble shoot.
