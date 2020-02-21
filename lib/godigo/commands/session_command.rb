@@ -17,21 +17,21 @@ DESCRIPTION
   synchronization.  Action can be `start', `stop', and `sync'.
   Machine and machine-server should be specified in a configuration
   file `~/.godigorc' as inferred later.  Note that for each action,
-  dedicated application is prepared to be invoked from MS Windows.
+  dedicated application is prepared to be launched from MS Windows.
 
   start
     Start `machine' on machine-server to log status.  To
-    invoke #{program_name}-start does the same thing.
+    call #{program_name}-start does the same thing.
 
   stop
-    Stop `mach-in' on machine-server to log status and issue `sync'.
-    To invoke #{program_name}-stop does the same thing.
+    Stop `machine' on machine-server to log status and issue `sync'.
+    To call #{program_name}-stop does the same thing.
 
   sync
     Synchronize local directory to remote directory specified in a
-    configuration file.  The action invokes `rsync' as sub-process
+    configuration file.  The action calls `rsync' as sub-process
     when parameters `src_path' and `dst_path' are found in the
-    configuration file.  To invoke #{program_name}-sync does the same
+    configuration file.  To call #{program_name}-sync does the same
     thing.  Options involved are shown below.
     $ cd ${src_path} && rsync -rltgoDvh --delete -e ssh ./* ${dst_path}
 
@@ -50,21 +50,22 @@ TROUBLESHOOT (1)
       archive$ chmod a+rwx -R *
 
 TROUBLESHOOT (2)
-　  #{program_name}-synca looks for `checkpoint.org' file to
-    tell the existence of a directory specified in `src_path:'.
-
+　  #{program_name}-sync looks for `checkpoint.org' file to
+    tell the existence of a directory specified in `src_path'.
+    Make sure if you can access to files on `src_path'.
+    
 TROUBLESHOOT (3)
     #{program_name}-sync does not work with some `rsync.exe'.
-    Specify `rsync.exe' with variable `rsync_path:'.
+    Specify `rsync.exe' with variable `rsync_path'.
       
 SETUP FOR SYNC
   (1) On MS Windows, mount a source directory with proper volume name
-      such as "Y:/".  On the top directory, place a file
+      such as "Y:\".  On the top directory, place a file
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
       case of MS Windows, to use rsync on MSYS is recommended.
   (3) Find out how the directory is spelled.  For a case where volume
-      "Y:/" on Windows is the source, the directory should be referred
+      "Y:\" on Windows is the source, the directory should be referred
       as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path:
       of the configuration file.
   (4) Create a directory in a server with proper permission.  Place
@@ -92,14 +93,14 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
-  February 20, 2020: Revised to be able to specify the path to rsync
-  October 4, 2018: Support src_path with drive letter
-  October 1, 2018: Change strategy for sync to support MSYS
+  February 20, 2020: Add option to specify rsync.
+  October 4, 2018: Support src_path with drive letter.
+  October 1, 2018: Change strategy for sync to support MSYS.
   October 3, 2017: Add a section trouble shoot.
-  July 15, 2016: Change option for rsync from `-avh' to `-rltgoDvh'
-  April 26, 2016: Documentation updated to be more correct
-  February 1, 2016: Revise document by Tak Kunihiro
-  October 1, 2015: Documented by Tak Kunihiro
+  July 15, 2016: Change option for rsync from `-avh' to `-rltgoDvh'.
+  April 26, 2016: Documentation updated to be more correct.
+  February 1, 2016: Revise document by Tak Kunihiro.
+  October 1, 2015: Documented by Tak Kunihiro.
 
 OPTIONS
 EOS
