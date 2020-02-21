@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'open3'
 require 'godigo/cui'
 module Godigo::Commands
@@ -34,7 +35,7 @@ DESCRIPTION
     thing.  Options involved are shown below.
     $ cd ${src_path} && rsync -rltgoDvh --delete -e ssh ./* ${dst_path}
 
-TROUBLESHOOT
+TROUBLESHOOT (1)
     Time to time, you see error messages as shown below.
 
       rsync: recv_generator: mkdir "/backup/JSM-7001F-LV/sync/..." failed: Permission denied (13)
@@ -48,17 +49,20 @@ TROUBLESHOOT
       archive$ cd /backup/JSM-7001F-LV/sync/
       archive$ chmod a+rwx -R *
 
-WHY GODIGO DOESN'T WORK
-    :Y drive not recognized.
-　   Missing `checkpoint.org 'file.
-     Some `rsync 'files are conflicting.
+TROUBLESHOOT (2)
+　  #{program_name}-synca looks for `checkpoint.org' file to
+    tell the existence of a directory specified in `src_path:'.
+
+TROUBLESHOOT (3)
+    #{program_name}-sync does not work with some `rsync.exe'.
+    Specify `rsync.exe' with variable `rsync_path:'.
       
 SETUP FOR SYNC
-  (1) On Windows, mount a source directory with proper volume name
+  (1) On MS Windows, mount a source directory with proper volume name
       such as "Y:/".  On the top directory, place a file
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
-      case of Windows, to use rsync on Cygwin is recommended.
+      case of MS Windows, to use rsync on MSYS is recommended.
   (3) Find out how the directory is spelled.  For a case where volume
       "Y:/" on Windows is the source, the directory should be referred
       as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path:
@@ -74,7 +78,7 @@ EXAMPLE OF CONFIGURATION FILE
   ## sync config
   src_path: /cygdrive/Y/
   dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-LV/sync/
-  #rsync_path: /usr/bin/rsync
+  # rsync_path: /usr/bin/rsync
 
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
