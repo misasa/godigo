@@ -55,8 +55,8 @@ TROUBLESHOOT (2)
     Make sure if you can access to files on `src_path'.
     
 TROUBLESHOOT (3)
-    #{program_name}-sync does not work with some `rsync.exe'.
-    Specify `rsync.exe' with variable `rsync_path'.
+    #{program_name}-sync does not work with certain `rsync.exe'.
+    Specify which `rsync.exe' to call with variable `rsync_path'.
       
 SETUP FOR SYNC
   (1) On MS Windows, mount a source directory with proper volume name
@@ -234,7 +234,7 @@ EOS
         _path = config['src_path']
       end
       unless _path
-        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |src_path|.  Put a line such like |src_path: C:/Users/dream/Desktop/deleteme.d"
+        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |src_path|.  Put a line such like |src_path: C:/Users/dream/Desktop/deleteme.d|."
       end
       _path
     end
@@ -246,7 +246,7 @@ EOS
         _path = config['rsync_path']
       end
       unless _path
-        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |rsync_path|.  Put a line such like |rsync_path: C:/msys64/usr/bin/rsync"
+        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |rsync_path|.  Put a line such like |rsync_path: C:/msys64/usr/bin/rsync|."
       end
       _path
     end
@@ -258,7 +258,7 @@ EOS
         _path = config['ssh_path']
       end
       unless _path
-        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |ssh_path|.  Put a line such like |rsync_path: C:/msys64/usr/bin/ssh"
+        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |ssh_path|.  Put a line such like |ssh_path: C:/msys64/usr/bin/ssh|."
       end
       _path
     end
