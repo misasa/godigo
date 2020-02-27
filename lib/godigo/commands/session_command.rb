@@ -79,7 +79,9 @@ EXAMPLE OF CONFIGURATION FILE
   ## sync config
   src_path: /cygdrive/Y/
   dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-LV/sync/
-  # rsync_path: /usr/bin/rsync
+  rsync_path: C:/msys64/usr/bin/rsync
+  ssh_path: C:/msys64/usr/bin/ssh
+
 
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
@@ -93,7 +95,8 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
-  February 20, 2020: Add option to specify rsync.
+  February 27, 2020: Add config to specify ssh_path.
+  February 20, 2020: Add config to specify rsync_path.
   October 4, 2018: Support src_path with drive letter.
   October 1, 2018: Change strategy for sync to support MSYS.
   October 3, 2017: Add a section trouble shoot.
@@ -236,6 +239,30 @@ EOS
       _path
     end
 
+    def get_rsync_path
+      if config.has_key?(:rsync_path)
+        _path = config[:rsync_path]
+      elsif config.has_key?('rsync_path')
+        _path = config['rsync_path']
+      end
+      unless _path
+        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |rsync_path|.  Put a line such like |rsync_path: C:/msys64/usr/bin/rsync"
+      end
+      _path
+    end
+
+    def get_ssh_path
+      if config.has_key?(:ssh_path)
+        _path = config[:ssh_path]
+      elsif config.has_key?('ssh_path')
+        _path = config['ssh_path']
+      end
+      unless _path
+        raise "Machine configuration file |#{MachineTimeClient.pref_path}| does not have parameter |ssh_path|.  Put a line such like |rsync_path: C:/msys64/usr/bin/ssh"
+      end
+      _path
+    end
+
     def checkpoint_exists?
       File.exists? checkpoint
     end
@@ -243,17 +270,15 @@ EOS
     def sync_command
       dst_path = get_dst_path
       src_path = get_src_path
-      rsync_path = "rsync"
-      if config.has_key?(:rsync_path)
-        rsync_path = config[:rsync_path]
-      end
+      rsync_pah = get_rsync_path
+      ssh_path = get_ssh_path
       cmd = "cd "
       if src_path =~ /[A-Z]\:/ # when path include drive letter
         cmd += "/d #{src_path} && "
       else
         cmd = "cd #{src_path} && "
       end
-      cmd = cmd + "#{rsync_path} -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{dst_path}" # -a == -rlptgoD
+      cmd = cmd + "#{rsync_path} -rltgoDvh --delete --chmod=u+rwx -e #{ssh_path} ./* #{dst_path}" # -a == -rlptgoD
     end
 
     def sync_session
