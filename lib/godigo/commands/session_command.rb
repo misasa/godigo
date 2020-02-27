@@ -55,8 +55,8 @@ TROUBLESHOOT (2)
     Make sure if you can access to files on `src_path'.
     
 TROUBLESHOOT (3)
-    #{program_name}-sync does not work with some `rsync.exe'.
-    Specify `rsync.exe' with variable `rsync_path'.
+    #{program_name}-sync does not work with certain `rsync.exe'.
+    Specify which `rsync.exe' to call with variable `rsync_path'.
       
 SETUP FOR SYNC
   (1) On MS Windows, mount a source directory with proper volume name
