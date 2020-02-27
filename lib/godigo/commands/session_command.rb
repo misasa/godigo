@@ -82,7 +82,6 @@ EXAMPLE OF CONFIGURATION FILE
   rsync_path: C:/msys64/usr/bin/rsync
   ssh_path: C:/msys64/usr/bin/ssh
 
-
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
