@@ -270,7 +270,7 @@ EOS
     def sync_command
       dst_path = get_dst_path
       src_path = get_src_path
-      rsync_pah = get_rsync_path
+      rsync_path = get_rsync_path
       ssh_path = get_ssh_path
       cmd = "cd "
       if src_path =~ /[A-Z]\:/ # when path include drive letter
