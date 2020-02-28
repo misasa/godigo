@@ -46,41 +46,42 @@ TROUBLESHOOT (1)
     following example to fix the permission.
 
       $ ssh falcon@archive.misasa.okayama-u.ac.jp
-      archive$ cd /backup/JSM-7001F-LV/sync/
+      archive$ cd /backup/JSM-7001F-1270/sync/
       archive$ chmod a+rwx -R *
 
 TROUBLESHOOT (2)
 　  #{program_name}-sync looks for `checkpoint.org' file to
-    tell the existence of a directory specified in `src_path'.
-    Make sure if you can access to files on `src_path'.
+    tell the existence of a directory specified in :src_path.
+    Make sure if you can access to files on :src_path.
     
 TROUBLESHOOT (3)
     #{program_name}-sync does not work with certain `rsync.exe'.
-    Specify which `rsync.exe' to call with variable `rsync_path'.
+    Specify which `rsync.exe' to call with variable :rsync_path.
+    Also specify which `ssh.exe' to call with variable :ssh_path.
       
 SETUP FOR SYNC
   (1) On MS Windows, mount a source directory with proper volume name
-      such as "Y:\".  On the top directory, place a file
+      such as "Y:/".  On the top directory, place a file
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
       case of MS Windows, to use rsync on MSYS is recommended.
   (3) Find out how the directory is spelled.  For a case where volume
-      "Y:\" on Windows is the source, the directory should be referred
-      as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path:
+      "Y:/" on MS Windows is the source, the directory should be referred
+      as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path
       of the configuration file.
   (4) Create a directory in a server with proper permission.  Place
-      the ssh-based URL onto :dst_path: in the configuration file.
+      the ssh-based URL onto :dst_path in the configuration file.
   (5) Setup ssh key to access to the server without authorization.
 
 EXAMPLE OF CONFIGURATION FILE
   ## machine config
-  uri_machine: database.misasa.okayama-u.ac.jp/machine
-  machine: JSM-7001F-LV
+  :uri_machine: http://database.misasa.okayama-u.ac.jp/machine/
+  :machine: JSM-7001F-1280
   ## sync config
-  src_path: /cygdrive/Y/
-  dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-LV/sync/
-  rsync_path: C:/msys64/usr/bin/rsync
-  ssh_path: C:/msys64/usr/bin/ssh
+  :src_path: Y:/
+  :dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-1270/sync/
+  :rsync_path: C:/msys64/usr/bin/rsync
+  :ssh_path: C:/msys64/usr/bin/ssh
 
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
