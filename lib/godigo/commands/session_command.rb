@@ -64,7 +64,7 @@ SETUP FOR SYNC
       such as "Y:/".  On the top directory, place a file
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
-      case of MS Windows, to use rsync on MSYS is recommended.
+      case of MS Windows, to use rsync on MSYS2 is recommended.
   (3) Find out how the directory is spelled.  For a case where volume
       "Y:/" on MS Windows is the source, the directory should be referred
       as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path
