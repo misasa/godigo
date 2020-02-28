@@ -30,10 +30,10 @@ DESCRIPTION
   sync
     Synchronize local directory to remote directory specified in a
     configuration file.  The action calls `rsync' as sub-process
-    when parameters `src_path' and `dst_path' are found in the
+    when parameters :src_path and :dst_path are found in the
     configuration file.  To call #{program_name}-sync does the same
     thing.  Options involved are shown below.
-    $ cd ${src_path} && rsync -rltgoDvh --delete -e ssh ./* ${dst_path}
+    $ cd /d ${src_path}; ${rsync_path} -rltgoDvh --delete -e ${ssh_path} ./* ${dst_path}
 
 TROUBLESHOOT (1)
     Time to time, you see error messages as shown below.
@@ -51,8 +51,8 @@ TROUBLESHOOT (1)
 
 TROUBLESHOOT (2)
     #{program_name}-sync looks for `checkpoint.org' file to
-    tell the existence of a directory specified in `src_path'.
-    Make sure if you can access to files on `src_path'.
+    tell the existence of a directory specified in :src_path.
+    Make sure if you can access to files on :src_path.
     
 TROUBLESHOOT (3)
     #{program_name}-sync does not work with certain `rsync.exe'.
@@ -68,7 +68,7 @@ SETUP FOR SYNC
   (3) Find out how the directory is spelled.  For a case where volume
       "Y:/" on MS Windows is the source, the directory should be referred
       as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path
-      of the configuration file.
+      of the configuration file.  Note that we drop support for Cygwin.
   (4) Create a directory in a server with proper permission.  Place
       the ssh-based URL onto :dst_path in the configuration file.
   (5) Setup ssh key to access to the server without authorization.
