@@ -50,7 +50,7 @@ TROUBLESHOOT (1)
       archive$ chmod a+rwx -R *
 
 TROUBLESHOOT (2)
-　  #{program_name}-sync looks for `checkpoint.org' file to
+    #{program_name}-sync looks for `checkpoint.org' file to
     tell the existence of a directory specified in `src_path'.
     Make sure if you can access to files on `src_path'.
     
