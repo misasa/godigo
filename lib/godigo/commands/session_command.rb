@@ -78,11 +78,11 @@ EXAMPLE OF CONFIGURATION FILE
   :uri_machine: http://database.misasa.okayama-u.ac.jp/machine/
   :machine: JSM-7001F-1280
   ## sync config
+  :before_sync_command: dir
   :src_path: Y:/
   :dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-1270/sync/
   :rsync_path: C:/msys64/usr/bin/rsync
   :ssh_path: C:/msys64/usr/bin/ssh
-
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
@@ -95,6 +95,7 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  March 9, 2020: Add config to run command before sync.
   February 27, 2020: Add config to specify ssh_path.
   February 20, 2020: Add config to specify rsync_path.
   October 4, 2018: Support src_path with drive letter.
@@ -263,8 +264,31 @@ EOS
       _path
     end
 
+    def get_before_sync_command
+      _path = nil
+      if config.has_key?(:before_sync_command)
+        _path = config[:before_sync_command]
+      elsif config.has_key?('before_sync_command')
+        _path = config['before_sync_command']
+      end
+      _path
+    end
+
     def checkpoint_exists?
       File.exists? checkpoint
+    end
+
+    def before_sync
+      before_sync_command = get_before_sync_command
+      if before_sync_command
+        cmd = "#{before_sync_command}"
+        stdout.print "Are you sure you want to run #{before_sync_command}? [Y/n] "
+        answer = (stdin.gets)[0].downcase
+        unless answer == "n"
+          stdout.print "--> I issued |#{cmd}|"
+          system_execute(cmd)
+        end
+      end
     end
 
     def sync_command
@@ -282,6 +306,7 @@ EOS
     end
 
     def sync_session
+      before_sync
       dst_path = get_dst_path
       src_path = get_src_path
       raise "Could not find checkpoint file in #{checkpoint}." unless checkpoint_exists?
