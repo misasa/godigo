@@ -30,10 +30,10 @@ DESCRIPTION
   sync
     Synchronize local directory to remote directory specified in a
     configuration file.  The action calls `rsync' as sub-process
-    when parameters `src_path' and `dst_path' are found in the
+    when parameters :src_path and :dst_path are found in the
     configuration file.  To call #{program_name}-sync does the same
     thing.  Options involved are shown below.
-    $ cd ${src_path} && rsync -rltgoDvh --delete -e ssh ./* ${dst_path}
+    $ cd /d ${src_path}; ${rsync_path} -rltgoDvh --delete -e ${ssh_path} ./* ${dst_path}
 
 TROUBLESHOOT (1)
     Time to time, you see error messages as shown below.
@@ -51,8 +51,8 @@ TROUBLESHOOT (1)
 
 TROUBLESHOOT (2)
     #{program_name}-sync looks for `checkpoint.org' file to
-    tell the existence of a directory specified in `src_path'.
-    Make sure if you can access to files on `src_path'.
+    tell the existence of a directory specified in :src_path.
+    Make sure if you can access to files on :src_path.
     
 TROUBLESHOOT (3)
     #{program_name}-sync does not work with certain `rsync.exe'.
@@ -64,11 +64,11 @@ SETUP FOR SYNC
       such as "Y:/".  On the top directory, place a file
       `checkpoint.org' with any content for file recognition.
   (2) Make sure if rsync in installed somewhere discoverable.  In a
-      case of MS Windows, to use rsync on MSYS is recommended.
+      case of MS Windows, to use rsync on MSYS2 is recommended.
   (3) Find out how the directory is spelled.  For a case where volume
       "Y:/" on MS Windows is the source, the directory should be referred
       as "/cygdrive/Y/" for rsync on Cygwin.  Place it on :src_path
-      of the configuration file.
+      of the configuration file.  Note that we drop support for Cygwin.
   (4) Create a directory in a server with proper permission.  Place
       the ssh-based URL onto :dst_path in the configuration file.
   (5) Setup ssh key to access to the server without authorization.
@@ -78,11 +78,11 @@ EXAMPLE OF CONFIGURATION FILE
   :uri_machine: http://database.misasa.okayama-u.ac.jp/machine/
   :machine: JSM-7001F-1280
   ## sync config
+  :before_sync_command: dir
   :src_path: Y:/
   :dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-1270/sync/
   :rsync_path: C:/msys64/usr/bin/rsync
   :ssh_path: C:/msys64/usr/bin/ssh
-
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
@@ -95,6 +95,7 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  March 9, 2020: Add config to run command before sync.
   February 27, 2020: Add config to specify ssh_path.
   February 20, 2020: Add config to specify rsync_path.
   October 4, 2018: Support src_path with drive letter.
@@ -263,8 +264,31 @@ EOS
       _path
     end
 
+    def get_before_sync_command
+      _path = nil
+      if config.has_key?(:before_sync_command)
+        _path = config[:before_sync_command]
+      elsif config.has_key?('before_sync_command')
+        _path = config['before_sync_command']
+      end
+      _path
+    end
+
     def checkpoint_exists?
       File.exists? checkpoint
+    end
+
+    def before_sync
+      before_sync_command = get_before_sync_command
+      if before_sync_command
+        cmd = "#{before_sync_command}"
+        stdout.print "Are you sure you want to run #{before_sync_command}? [Y/n] "
+        answer = (stdin.gets)[0].downcase
+        unless answer == "n"
+          stdout.print "--> I issued |#{cmd}|"
+          system_execute(cmd)
+        end
+      end
     end
 
     def sync_command
@@ -282,6 +306,7 @@ EOS
     end
 
     def sync_session
+      before_sync
       dst_path = get_dst_path
       src_path = get_src_path
       raise "Could not find checkpoint file in #{checkpoint}." unless checkpoint_exists?
