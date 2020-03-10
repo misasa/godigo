@@ -114,27 +114,33 @@ module Godigo::Commands
     describe "sync_command", :current => true do
       subject { cui.sync_command }
       let(:args){[]}
-      let(:config){ {:dst_path => "user@example.com:~/", :src_path => "/cygdrive/u/Users/"} }
+      let(:config){ {:dst_path => "user@example.com:~/", :src_path => "/cygdrive/u/Users/", :rsync_path => "rsync", :ssh_path => 'ssh'} }
       before do
         allow(cui).to receive(:config).and_return(config)
       end
       it {
-        expect(subject).to be_eql("cd #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{config[:dst_path]}")
+        expect(subject).to be_eql("cd #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./ #{config[:dst_path]}")
       }
       context "with drive letter" do
-        let(:config){ {:dst_path => "user@example.com:~/", :src_path => "D:/"} }
+        let(:config){ {:dst_path => "user@example.com:~/", :src_path => "D:/", :rsync_path => "rsync", :ssh_path => 'ssh'} }
         it {
-          expect(subject).to be_eql("cd /d #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{config[:dst_path]}")
+          expect(subject).to be_eql("cd /d #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./ #{config[:dst_path]}")
+        }
+      end
+      context "with ssh_path" do
+        let(:config){ {:dst_path => "user@example.com:~/", :src_path => "/cygdrive/u/Users/", :rsync_path => "rsync", :ssh_path => 'ssh'} }
+        it {
+          expect(subject).to be_eql("cd #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./ #{config[:dst_path]}")
         }
       end
     end
 
-    describe "sync_session", :current => true do
+    describe "sync_session" do
       subject { cui.sync_session }
       let(:args){ [] }
       let(:machine_obj){ double('machine', :name => "TEST-111").as_null_object }
       let(:session_obj){ double('session').as_null_object }
-      let(:config){ {:dst_path => "user@example.com:~/", :src_path => "C:/cygwin/home/yyachi/orochi-devel"} }
+      let(:config){ {:dst_path => "user@example.com:~/", :src_path => "C:/cygwin/home/yyachi/orochi-devel", :rsync_path => "rsync", :ssh_path => "ssh"} }
       before do
         allow(cui).to receive(:config).and_return(config)
         #allow(cui).to receive(:checkpoint_exists?).and_return(true)
@@ -142,14 +148,14 @@ module Godigo::Commands
       it {
         expect(File).to receive(:exists?).with("#{File.join(config[:src_path], "checkpoint.org")}").and_return(true)
         expect(stdout).to receive(:print).with("Are you sure you want to copy #{config[:src_path]} to #{config[:dst_path]}? [Y/n] ")
-        expect(stdout).to receive(:print).with("--> I issued |cd /d #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{config[:dst_path]}|")
+        expect(stdout).to receive(:print).with("--> I issued |cd /d #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./ #{config[:dst_path]}|")
         expect(stdin).to receive(:gets).and_return("y\n")
-        expect(cui).to receive(:system_execute).with("cd /d #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{config[:dst_path]}")
+        expect(cui).to receive(:system_execute).with("cd /d #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./ #{config[:dst_path]}")
         subject
       }
 
       context "with mingw ruby" do
-        let(:config){ {:dst_path => "user@example.com:~/", :src_path => "/cygdrive/u"} }
+        let(:config){ {:dst_path => "user@example.com:~/", :src_path => "/cygdrive/u", :rsync_path => "rsync", :ssh_path => "ssh"} }
         before do
           allow(cui).to receive(:platform).and_return("mingw")
         end
@@ -157,10 +163,10 @@ module Godigo::Commands
           expect(File).to receive(:exists?).with("U:/checkpoint.org").and_return(true)
           # expect(stdout).to receive(:print).with("Are you sure you want to copy /cygdrive/u to user@example.com:~/? [Y/n] ")
           expect(stdout).to receive(:print).with("Are you sure you want to copy #{config[:src_path]} to #{config[:dst_path]}? [Y/n] ")
-          expect(stdout).to receive(:print).with("--> I issued |cd #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{config[:dst_path]}|")
+          expect(stdout).to receive(:print).with("--> I issued |cd #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./ #{config[:dst_path]}|")
           expect(stdin).to receive(:gets).and_return("y\n")
           # expect(cui).to receive(:system_execute).with("rsync -rltgoDvh --delete -e ssh /cygdrive/u user@example.com:~/")
-          expect(cui).to receive(:system_execute).with("cd #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./* #{config[:dst_path]}")
+          expect(cui).to receive(:system_execute).with("cd #{config[:src_path]} && rsync -rltgoDvh --delete --chmod=u+rwx -e ssh ./ #{config[:dst_path]}")
           subject
         }
       end

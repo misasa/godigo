@@ -302,7 +302,7 @@ EOS
       else
         cmd = "cd #{src_path} && "
       end
-      cmd = cmd + "#{rsync_path} -rltgoDvh --delete --chmod=u+rwx -e #{ssh_path} ./* #{dst_path}" # -a == -rlptgoD
+      cmd = cmd + "#{rsync_path} -rltgoDvh --delete --chmod=u+rwx -e #{ssh_path} ./ #{dst_path}" # -a == -rlptgoD
     end
 
     def sync_session
@@ -313,8 +313,6 @@ EOS
       stdout.print "Are you sure you want to copy #{src_path} to #{dst_path}? [Y/n] "
       answer = (stdin.gets)[0].downcase
       unless answer == "n"
-          # cmd = "rsync -avh --delete -e ssh #{src_path} #{dst_path}"
-          # cmd = "cd #{src_path} && rsync -rltgoDvh --delete -e ssh ./* #{dst_path}" # -a == -rlptgoD
           cmd = sync_command
           stdout.print "--> I issued |#{cmd}|"
           system_execute(cmd)
