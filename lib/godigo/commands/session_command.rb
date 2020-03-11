@@ -78,11 +78,13 @@ EXAMPLE OF CONFIGURATION FILE
   :uri_machine: http://database.misasa.okayama-u.ac.jp/machine/
   :machine: JSM-7001F-1280
   ## sync config
-  :before_sync_command: dir
   :src_path: Y:/
   :dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-1270/sync/
   :rsync_path: C:/msys64/usr/bin/rsync
   :ssh_path: C:/msys64/usr/bin/ssh
+  ## callback config
+  :after_start_command: echo
+  :after_stop_command: echo
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
@@ -150,41 +152,44 @@ EOS
     def start_session
       machine = get_machine
       if machine.is_running?
-      stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
+        stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
         answer = (stdin.gets)[0].downcase
-      if answer == "y" or answer == "\n"
-        machine.stop
+        if answer == "y" or answer == "\n"
+          machine.stop
+          machine.start
+          after_start
+        else
+          exit
+        end
+      else
         machine.start
-      else
-        exit
-      end
-      else
-      machine.start
+        after_start
       end
       session = machine.current_session
       print_label session
       if OPTS[:message]
-      message = argv.shift
-      if message
-        session.description = message
-        session.save
-      end
+        message = argv.shift
+        if message
+          session.description = message
+          session.save
+        end
       end
       stdout.puts session if OPTS[:verbose]
 
       if OPTS[:web]
-      open_browser
+        open_browser
       end
     end
 
     def stop_session
       machine = get_machine
       if machine.is_running?
-      session = machine.current_session
-      stdout.puts session if OPTS[:verbose]
-      machine.stop
-      stdout.puts "Session closed"
-      sync_session
+        session = machine.current_session
+        stdout.puts session if OPTS[:verbose]
+        machine.stop
+        stdout.puts "Session closed"
+        after_stop
+        sync_session
       end
     end
 
@@ -212,6 +217,15 @@ EOS
       _path.gsub!("/cygdrive/z","Z:")
       end
       File.join(_path, 'checkpoint.org')
+    end
+
+    def get_value_from_config(key, val = nil)
+      if config.has_key?(key)
+        val = config[key]
+      elsif config.has_key?(key.to_s)
+        val = config[key.to_s]
+      end
+      val
     end
 
     def get_dst_path
@@ -264,31 +278,33 @@ EOS
       _path
     end
 
-    def get_before_sync_command
-      _path = nil
-      if config.has_key?(:before_sync_command)
-        _path = config[:before_sync_command]
-      elsif config.has_key?('before_sync_command')
-        _path = config['before_sync_command']
-      end
-      _path
-    end
-
     def checkpoint_exists?
       File.exists? checkpoint
     end
 
-    def before_sync
-      before_sync_command = get_before_sync_command
-      if before_sync_command
-        cmd = "#{before_sync_command}"
-        stdout.print "Are you sure you want to run #{before_sync_command}? [Y/n] "
-        answer = (stdin.gets)[0].downcase
-        unless answer == "n"
-          stdout.print "--> I issued |#{cmd}|"
-          system_execute(cmd)
-        end
+
+    def execute_cmd_unless_answer_no(cmd)
+      stdout.print "Are you sure you want to run #{cmd}? [Y/n] "
+      answer = (stdin.gets)[0].downcase
+      unless answer == "n"
+        stdout.print "--> I issued |#{cmd}|"
+        system_execute(cmd)
       end
+    end
+
+    def after_start
+      cmd = get_value_from_config(:after_start_command)
+      execute_cmd_unless_answer_no(cmd) if cmd
+    end
+
+    def before_sync
+      cmd = get_value_from_config(:before_sync_command)
+      execute_cmd_unless_answer_no(cmd) if cmd
+    end
+
+    def after_stop
+      cmd = get_value_from_config(:after_stop_command)
+      execute_cmd_unless_answer_no(cmd) if cmd
     end
 
     def sync_command
