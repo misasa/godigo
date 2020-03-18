@@ -37,7 +37,8 @@ DESCRIPTION
     when parameters :src_path and :dst_path are found in the
     configuration file.  To call #{program_name}-sync does the same
     thing.  Options involved are shown below.
-    $ cd /d ${src_path}; ${rsync_path} -rltgoDvh --delete -e ${ssh_path} ./* ${dst_path}
+
+    $ cd /d ${src_path}; ${rsync_path} -rltgoDvh --delete -e ${ssh_path} ./ ${dst_path}
 
 TROUBLESHOOT (1)
     Time to time, you see error messages as shown below.
