@@ -15,9 +15,10 @@ SYNOPSIS
 DESCRIPTION
   Keep track of machine status.  This also offers interface for
   synchronization.  Action can be `start', `stop', and `sync'.
-  Machine and machine-server should be specified in a configuration
-  file `~/.godigorc' as inferred later.  Note that for each action,
-  dedicated application is prepared to be launched from MS Windows.
+  This program can launch applicatiocan specified by user before
+  or after each action.  Machine, machine-server, and the application
+  should be specified in a configuration file `~/.godigorc' as
+  inferred later.  
 
   start
     Start `machine' on machine-server to log status.  To
@@ -74,17 +75,19 @@ SETUP FOR SYNC
   (5) Setup ssh key to access to the server without authorization.
 
 EXAMPLE OF CONFIGURATION FILE
-  ## machine config
+  ## machine server
   :uri_machine: http://database.misasa.okayama-u.ac.jp/machine/
   :machine: JSM-7001F-1280
-  ## sync config
+  ## sync
   :src_path: Y:/
   :dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-1270/sync/
   :rsync_path: C:/msys64/usr/bin/rsync
   :ssh_path: C:/msys64/usr/bin/ssh
-  ## callback config
-  :after_start_command: echo
-  :after_stop_command: echo
+  ## application launcher
+  # :after_start_command: echo MsgBox "Session was started.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
+  # :after_stop_command: echo MsgBox "Session was closed.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
+  # :before_sync_command: echo MsgBox "Do you want to synchronize files?",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
+
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
