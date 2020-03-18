@@ -21,12 +21,16 @@ DESCRIPTION
   inferred later.  
 
   start
-    Start `machine' on machine-server to log status.  To
-    call #{program_name}-start does the same thing.
+    Start `machine' on machine-server to log status.  To call
+    #{program_name}-start does the same thing.  The action calls a 
+    command as sub-process when parameters :after_start_command is
+    found in the configuration file. 
 
   stop
     Stop `machine' on machine-server to log status and issue `sync'.
-    To call #{program_name}-stop does the same thing.
+    To call #{program_name}-stop does the same thing.  The action 
+    calls a command as sub-process when parameters :after_stop_command
+    is found in the configuration file. 
 
   sync
     Synchronize local directory to remote directory specified in a
@@ -34,7 +38,8 @@ DESCRIPTION
     when parameters :src_path and :dst_path are found in the
     configuration file.  To call #{program_name}-sync does the same
     thing.  Options involved are shown below.
-    $ cd /d ${src_path}; ${rsync_path} -rltgoDvh --delete -e ${ssh_path} ./* ${dst_path}
+
+    $ cd /d ${src_path}; ${rsync_path} -rltgoDvh --delete -e ${ssh_path} ./ ${dst_path}
 
 TROUBLESHOOT (1)
     Time to time, you see error messages as shown below.
@@ -100,6 +105,7 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  March 12, 2020: Add config to run callbacks 
   March 9, 2020: Add config to run command before sync.
   February 27, 2020: Add config to specify ssh_path.
   February 20, 2020: Add config to specify rsync_path.
