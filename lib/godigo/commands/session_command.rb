@@ -92,7 +92,10 @@ EXAMPLE OF CONFIGURATION FILE
   # :after_start_command: echo MsgBox "Session was started.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
   # :after_stop_command: echo MsgBox "Session was closed.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
   # :before_sync_command: echo MsgBox "Do you want to synchronize files?",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
-
+  ## Skip question before exucute command for scheduled sync.
+  :answer_yes: true
+  #:answer_yes: false 
+  
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
@@ -162,7 +165,11 @@ EOS
       machine = get_machine
       if machine.is_running?
         stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
+      if get_answer_yes
+        answer = "y"
+      else
         answer = (stdin.gets)[0].downcase
+      end
         if answer == "y" or answer == "\n"
           machine.stop
           machine.start
@@ -287,6 +294,18 @@ EOS
       _path
     end
 
+    def get_answer_yes
+      if config.has_key?(:answer_yes)
+        _v = config[:answer_yes]
+      elsif config.has_key?('answer_yes')
+        _v = config['answer_yes']
+      end
+      unless _v
+        _v = false
+      end
+      _v
+    end
+
     def checkpoint_exists?
       File.exists? checkpoint
     end
@@ -294,7 +313,11 @@ EOS
 
     def execute_cmd_unless_answer_no(cmd)
       stdout.print "Are you sure you want to run #{cmd}? [Y/n] "
-      answer = (stdin.gets)[0].downcase
+      if get_answer_yes
+        answer = "y"
+      else
+        answer = (stdin.gets)[0].downcase
+      end
       unless answer == "n"
         stdout.print "--> I issued |#{cmd}|"
         system_execute(cmd)
@@ -336,7 +359,11 @@ EOS
       src_path = get_src_path
       raise "Could not find checkpoint file in #{checkpoint}." unless checkpoint_exists?
       stdout.print "Are you sure you want to copy #{src_path} to #{dst_path}? [Y/n] "
-      answer = (stdin.gets)[0].downcase
+      if get_answer_yes
+        answer = "y"
+      else
+        answer = (stdin.gets)[0].downcase
+      end
       unless answer == "n"
           cmd = sync_command
           stdout.print "--> I issued |#{cmd}|"
