@@ -92,9 +92,9 @@ EXAMPLE OF CONFIGURATION FILE
   # :after_start_command: echo MsgBox "Session was started.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
   # :after_stop_command: echo MsgBox "Session was closed.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
   # :before_sync_command: echo MsgBox "Do you want to synchronize files?",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
-  ## Skip question before exucute command for scheduled sync.
-  :answer_yes: true
-  #:answer_yes: false 
+  ## Assume that the answer to any question is yes.
+  :assume_yes: true
+  #:assume_yes: false 
   
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
@@ -108,6 +108,7 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  April 6, 2020: Add config to assume that the answer to any question is yes. 
   March 12, 2020: Add config to run callbacks 
   March 9, 2020: Add config to run command before sync.
   February 27, 2020: Add config to specify ssh_path.
@@ -295,10 +296,10 @@ EOS
     end
 
     def get_answer_yes
-      if config.has_key?(:answer_yes)
-        _v = config[:answer_yes]
-      elsif config.has_key?('answer_yes')
-        _v = config['answer_yes']
+      if config.has_key?(:assume_yes)
+        _v = config[:assume_yes]
+      elsif config.has_key?('assume_yes')
+        _v = config['assume_yes']
       end
       unless _v
         _v = false
