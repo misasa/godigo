@@ -18,7 +18,9 @@ DESCRIPTION
   This program can launch applicatiocan specified by user before
   or after each action.  Machine, machine-server, and the application
   should be specified in a configuration file `~/.godigorc' as
-  inferred later.  
+  inferred later.  This program assumes that the answer to any question
+  which would be asked is yes when parameters :assume_yes: true is found
+  in the configuration file.
 
   start
     Start `machine' on machine-server to log status.  To call
