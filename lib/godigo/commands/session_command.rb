@@ -80,6 +80,8 @@ SETUP FOR SYNC
   (4) Create a directory in a server with proper permission.  Place
       the ssh-based URL onto :dst_path in the configuration file.
   (5) Setup ssh key to access to the server without authorization.
+  (6) By default, the program asks you before calling external programs.
+      If you do not want to type yes or no everytime, set :assume_yes to yes.
 
 EXAMPLE OF CONFIGURATION FILE
   ## machine server
