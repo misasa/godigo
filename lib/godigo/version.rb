@@ -1,3 +1,3 @@
 module Godigo
-  VERSION = "1.2.5.4"
+  VERSION = "1.2.6"
 end
