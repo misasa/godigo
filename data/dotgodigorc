@@ -1,0 +1,5 @@
+---
+:uri_machine: http://example.com/machine/
+:machine: MACHINE-1
+:src_path: D:/
+:dst_path: machine@example.com:/backup/machine-1/sync
