@@ -15,9 +15,12 @@ SYNOPSIS
 DESCRIPTION
   Keep track of machine status.  This also offers interface for
   synchronization.  Action can be `start', `stop', and `sync'.
-  Machine and machine-server should be specified in a configuration
-  file `~/.godigorc' as inferred later.  Note that for each action,
-  dedicated application is prepared to be launched from MS Windows.
+  This program can launch applicatiocan specified by user before
+  or after each action.  Machine, machine-server, and the application
+  should be specified in a configuration file `~/.godigorc' as
+  inferred later.  This program assumes that the answer to any question
+  which would be asked is yes when parameters :assume_yes: true is found
+  in the configuration file.
 
   start
     Start `machine' on machine-server to log status.  To call
@@ -77,19 +80,26 @@ SETUP FOR SYNC
   (4) Create a directory in a server with proper permission.  Place
       the ssh-based URL onto :dst_path in the configuration file.
   (5) Setup ssh key to access to the server without authorization.
+  (6) By default, the program asks you before calling external programs.
+      If you do not want to type yes or no everytime, set :assume_yes to yes.
 
 EXAMPLE OF CONFIGURATION FILE
-  ## machine config
+  ## machine server
   :uri_machine: http://database.misasa.okayama-u.ac.jp/machine/
   :machine: JSM-7001F-1280
-  ## sync config
+  ## sync
   :src_path: Y:/
   :dst_path: falcon@archive.misasa.okayama-u.ac.jp:/backup/JSM-7001F-1270/sync/
   :rsync_path: C:/msys64/usr/bin/rsync
   :ssh_path: C:/msys64/usr/bin/ssh
-  ## callback config
-  :after_start_command: echo
-  :after_stop_command: echo
+  ## application launcher
+  # :after_start_command: echo MsgBox "Session was started.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
+  # :after_stop_command: echo MsgBox "Session was closed.",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
+  # :before_sync_command: echo MsgBox "Do you want to synchronize files?",vbInformation,"Info" > %TEMP%\msgbox.vbs & %TEMP%\msgbox.vbs
+  ## Assume that the answer to any question is yes.
+  :assume_yes: true
+  #:assume_yes: false 
+  
 SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
   TimeBokan
@@ -102,6 +112,7 @@ IMPLEMENTATION
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY
+  April 6, 2020: Add config to assume that the answer to any question is yes. 
   March 12, 2020: Add config to run callbacks 
   March 9, 2020: Add config to run command before sync.
   February 27, 2020: Add config to specify ssh_path.
@@ -159,7 +170,11 @@ EOS
       machine = get_machine
       if machine.is_running?
         stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
+      if get_answer_yes
+        answer = "y"
+      else
         answer = (stdin.gets)[0].downcase
+      end
         if answer == "y" or answer == "\n"
           machine.stop
           machine.start
@@ -284,6 +299,18 @@ EOS
       _path
     end
 
+    def get_answer_yes
+      if config.has_key?(:assume_yes)
+        _v = config[:assume_yes]
+      elsif config.has_key?('assume_yes')
+        _v = config['assume_yes']
+      end
+      unless _v
+        _v = false
+      end
+      _v
+    end
+
     def checkpoint_exists?
       File.exists? checkpoint
     end
@@ -291,7 +318,11 @@ EOS
 
     def execute_cmd_unless_answer_no(cmd)
       stdout.print "Are you sure you want to run #{cmd}? [Y/n] "
-      answer = (stdin.gets)[0].downcase
+      if get_answer_yes
+        answer = "y"
+      else
+        answer = (stdin.gets)[0].downcase
+      end
       unless answer == "n"
         stdout.print "--> I issued |#{cmd}|"
         system_execute(cmd)
@@ -324,7 +355,7 @@ EOS
       else
         cmd = "cd #{src_path} && "
       end
-      cmd = cmd + "#{rsync_path} -rltgoDvh --delete --chmod=u+rwx -e #{ssh_path} ./ #{dst_path}" # -a == -rlptgoD
+      cmd = cmd + "#{rsync_path} --recursive --links --times --group --owner --devices --specials --verbose --verbose --progress --human-readable --delete --chmod=u+rwx -e #{ssh_path} ./ #{dst_path}" # -a == -rlptgoD
     end
 
     def sync_session
@@ -333,7 +364,11 @@ EOS
       src_path = get_src_path
       raise "Could not find checkpoint file in #{checkpoint}." unless checkpoint_exists?
       stdout.print "Are you sure you want to copy #{src_path} to #{dst_path}? [Y/n] "
-      answer = (stdin.gets)[0].downcase
+      if get_answer_yes
+        answer = "y"
+      else
+        answer = (stdin.gets)[0].downcase
+      end
       unless answer == "n"
           cmd = sync_command
           stdout.print "--> I issued |#{cmd}|"
