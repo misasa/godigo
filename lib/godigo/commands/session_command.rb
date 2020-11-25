@@ -355,7 +355,7 @@ EOS
       else
         cmd = "cd #{src_path} && "
       end
-      cmd = cmd + "#{rsync_path} --recursive --links --times --group --owner --devices --specials --verbose --verbose --progress --human-readable --delete --chmod=u+rwx -e #{ssh_path} ./ #{dst_path}" # -a == -rlptgoD
+      cmd = cmd + "#{rsync_path} --recursive --links --times --group --owner --devices --specials --verbose --verbose --verbose --progress --human-readable --delete --chmod=u+rwx -e #{ssh_path} ./ #{dst_path}" # -a == -rlptgoD
     end
 
     def sync_session
