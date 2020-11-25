@@ -170,11 +170,7 @@ EOS
       machine = get_machine
       if machine.is_running?
         stdout.print "An open session |#{machine.name}| exists.  Do you want to close and start a new session? [Y/n] "
-      if get_answer_yes
-        answer = "y"
-      else
         answer = (stdin.gets)[0].downcase
-      end
         if answer == "y" or answer == "\n"
           machine.stop
           machine.start
