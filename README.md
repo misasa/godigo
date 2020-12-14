@@ -13,6 +13,10 @@ The utilities help to keep track of machine status.
 This package also offers interface for synchronization of local data files.
 Action can be `start`, `stop`, and `sync`.
 
+# Requrements
+
+Ruby 2.5, 2.6, or 2.7.
+
 # Dependency
 
 ## [gem package -- machine_time_client](https://github.com/misasa/machine_time_client "follow instruction")
